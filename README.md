@@ -58,3 +58,17 @@ export default function NavBar() {
 배열에 `.join(' ')`을 사용하는 방법을 사용해야 한다. </br>
 </br>
 별로 깔끔하지는 않은 방법이다. </br>
+
+## Styles JSX
+
+컴포넌트 내부에서 `<style>` 태그를 추가하여 js 파일 내부에서 css를 적용할 수 있다.
+만약 컴포넌트를 포함한 상위 컴포넌트에서 `<style>` 태그로 css를 적용하려고 한다면
+제대로 적용되지 않을 수 있다. (해당 style은 해당 컴포넌트 내부로만 범위가 한정됨.)
+
+```js
+<style jsx>{`
+  nav {
+    background-color: pink;
+  }
+`}</style>
+```
