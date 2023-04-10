@@ -1,38 +1,22 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# next.js-practice
 
-## Getting Started
+pages 폴더 안에 기재된 파일 이름 대로(또는 index.ts를 포함한 디렉토리 이름 대로)
+자동으로 routing 기능이 적용됨.
 
-First, run the development server:
+예) src/pages/about.ts
+localhost:3000/about 에서 해당 파일내의 컴포넌트를 출력해줌.
+컴포넌트의 이름은 상관이 없다. Home이든 Potato든 ...
+컴포넌트는 default로 export 되어야 한다.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-```
+만약에 user가 존재하지 않는 url로 요청한다면
+next.js가 자체적으로 404 페이지를 보여줌. (CRA는 404페이지 따로 만들어야됨...)
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## exception
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
-
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
-
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
-
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+1. src/pages/index.ts는 localhost:3000/ 에서 나타난다.
+   -> localhost:3000/index 아님. 404 뜸
+2. tsx 확장자가 아니더라도 tsx가 적용 가능함. + react를 import하지 않아도 됨.
+   -> 안되는데..?? 흠..
+3. CRA는 CSR용 라이브러리로 html 파일을 열어봤을 때 빈 div 객체만 있지만
+   next.js는 pre-rendering 기능이 있어서 미리 내용을 담아서 html을 만들어준다. (hydration)
+   SEO에 매우 좋은 기능임.
