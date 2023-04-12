@@ -124,3 +124,68 @@ export default function App({ Component, pageProps }: AppProps) {
 또한 `styles/globals.css` 파일을 `_app.tsx`에서 import 하여 사용할 수도 있다.</br>
 `_app.tsx`이외의 컴포넌트나 페이지에서는 `globals.css`를 import할 수 없고 </br>
 오로지 module만 import할 수 있다.</br>
+
+## Redirect and Rewrite
+
+next.js 앱에서 사용자가 특정 end-point로 접근하려고 할 때</br>
+사용자를 redirect 시켜주기 위해서는 `redirects` 기능을 사용할 수 있다.</br>
+</br>
+이를 설정하기 위해서는 `next.config.js`에서 redirects 설정을 해주면 된다.</br>
+예를 들어 `/old`라는 end-point로 접속했을 때 `/new`라는 end-point로 redirect 시키려고 한다면</br>
+`nextConfig` 객체 안에 아래와 같이 작성해주면 된다.</br>
+
+```js
+const nextConfig = {
+  reactStrictMode: true, // 기본설정 값
+  async redirects() {
+    return [
+      {
+        source: "/old", // "/old"로 접속을 하면 (incoming request)
+        destination: "/new", // "/new"으로 리다이렉트 (redirect to)
+        permanent: false, // 주소가 영원히 바뀐거라면 true, 임시적으로 바뀐거라면 false로 설정해준다.
+      },
+    ];
+  },
+};
+```
+
+end-point는 변경되고 그 뒤에 path는 동일하게 유지해야 하는 경우에는 아래와 같이 작성하면 된다.</br>
+
+```js
+const nextConfig = {
+  reactStrictMode: true, // 기본설정 값
+  async redirects() {
+    return [
+      {
+        source: "/old/:path*", // path가 아니라 다른 임의의 문구를 넣어도 됨.
+        destination: "/new/:path*", // 뒤에 있는 *(와일드카드)는 nested path인 경우에 넣어주면 된다.
+        permanent: false,
+      },
+    ];
+  },
+};
+```
+
+만약 redirect 조건을 두개 이상 추가하고 싶다면 배열 내에 새로운 객체로 작성해주면 된다.</br>
+
+api 요청 등을 보낼 때 요청 주소에 api key가 포함되어 있는 등의 보안이 필요한 사항이 있다면</br>
+next.js의 `rewrites` 기능을 사용하면 된다.</br>
+</br>
+redirects 기능을 사용하면 사용자가 바뀐 url을 확인할 수 있지만</br>
+rewrites 기능을 사용하면 바뀐 url을 사용자에게 알리지 않고 redirect 시킬 수 있다.</br>
+
+```js
+... nextConfig 상세내용 생략
+
+async rewrites() {
+    return [
+      {
+        source: "/api/movies",
+        destination: `https://api.themoviedb.org/3/movie/popular?api_key=${process.env.API_KEY}`,
+      },
+    ];
+  },
+```
+
+이렇게 하면 network 탭에서도 masking된 주소가 나타나므로</br>
+중요한 key 등의 정보를 숨길 수 있다.</br>
