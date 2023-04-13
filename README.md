@@ -215,3 +215,16 @@ API key 등을 숨기는데도 유용하게 사용할 수 있다.</br>
 async는 해도 되고 안해도 됨.</br>
 리턴되는 객체의 props키의 값은 해당 페이지 컴포넌트의 props로 전달된다.</br>
 해당 함수는 server 환경에서 실행되므로 client와 다르게 fetch 등의 비동기 요청시 주소를 생략없이 기재해야 한다.</br>
+
+## Dynamic Routes
+
+pages 디렉토리에서 `index`라는 이름으로 컴포넌트를 생성하면 기본 url(/)로 라우팅되고</br>
+특정 endpoint로 라우팅하고 싶다면 endpoint를 파일명으로 설정하면 된다.</br>
+특정 endpoint에서 특정 path를 적용하고 싶다면 endpoint명으로 디렉토리를 만들고</br>
+그 안에 index나 특정 path 이름 또는 `[id].tsx`와 같이 동적 라우팅이 가능하다.</br>
+반드시 id라고 적을필요는 없고 다른 변수명으로도 사용할 수 있다.</br>
+해당 페이지에서 `useRouter`훅을 이용하여 router를 출력했을때</br>
+query안에서 설정한 변수명으로 path를 확인할 수 있다.</br>
+ex) [id]로 설정한 경우 query: {id: '1'}</br>
+`[...id].tsx`처럼 `...`을 대괄호 안에 넣은 형식으로 만들면</br>
+모든 경로를 포착하는 동적 라우팅을 설정할 수 있다.</br>
