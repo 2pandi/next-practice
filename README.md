@@ -189,3 +189,29 @@ async rewrites() {
 
 이렇게 하면 network 탭에서도 masking된 주소가 나타나므로</br>
 중요한 key 등의 정보를 숨길 수 있다.</br>
+
+## Server Side Rendering(SSR)
+
+API fetching 데이터를 포함한 전체 페이지를 SSR 방식으로 구현하고자 한다면</br>
+`getServerSideProps` 함수를 사용하면 된다.</br>
+
+```js
+export async function getServerSideProps() {
+  const { results } = await (
+    await fetch("http://localhost:3000/api/movies")
+  ).json();
+  return {
+    props: { results },
+  };
+}
+```
+
+이 함수를 사용하기 위해서는 반드시 export 해야 하고</br>
+함수의 이름도 `getServerSideProps`로 반드시 작성해야 한다.</br>
+이 함수는 client가 아니라 server환경에서 실행되므로</br>
+API key 등을 숨기는데도 유용하게 사용할 수 있다.</br>
+(요청 url을 클라이언트에서 확인할 수 없으므로 `rewrites`를 사용할 필요 없음)</br>
+함수에서 해야할 일을 정의하고 props 키를 가진 객체를 리턴하면 된다.</br>
+async는 해도 되고 안해도 됨.</br>
+리턴되는 객체의 props키의 값은 해당 페이지 컴포넌트의 props로 전달된다.</br>
+해당 함수는 server 환경에서 실행되므로 client와 다르게 fetch 등의 비동기 요청시 주소를 생략없이 기재해야 한다.</br>

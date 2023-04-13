@@ -1,6 +1,4 @@
 import Seo from "@/components/Seo";
-import Image from "next/image";
-import { useEffect, useState } from "react";
 
 interface I_Movie {
   adult: boolean;
@@ -19,32 +17,19 @@ interface I_Movie {
   vote_count: number;
 }
 
-export default function Home() {
-  const [movies, setMovies] = useState<undefined | I_Movie[]>();
-
-  useEffect(() => {
-    (async () => {
-      const { results } = await (await fetch("/api/movies")).json();
-      setMovies(results);
-    })();
-  }, []);
-
+export default function Home({ results }: { results: I_Movie[] }) {
   return (
     <div className="container">
       <Seo title="Home" />
-      {movies ? (
-        movies.map((movie: I_Movie) => (
-          <div className="movie" key={movie.id}>
-            <img
-              src={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`}
-              alt={movie.title}
-            />
-            <h4>{movie.original_title}</h4>
-          </div>
-        ))
-      ) : (
-        <h4>Loading...</h4>
-      )}
+      {results.map((movie: I_Movie) => (
+        <div className="movie" key={movie.id}>
+          <img
+            src={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`}
+            alt={movie.title}
+          />
+          <h4>{movie.original_title}</h4>
+        </div>
+      ))}
       <style jsx>
         {`
           .container {
@@ -71,4 +56,13 @@ export default function Home() {
       </style>
     </div>
   );
+}
+
+export async function getServerSideProps() {
+  const { results } = await (
+    await fetch("http://localhost:3000/api/movies")
+  ).json();
+  return {
+    props: { results },
+  };
 }
