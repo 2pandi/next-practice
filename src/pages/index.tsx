@@ -21,13 +21,7 @@ interface I_Movie {
 export default function Home({ results }: { results: I_Movie[] }) {
   const router = useRouter();
   const onClick = (id: number, title: string) => {
-    router.push(
-      {
-        pathname: `/movies/${id}`,
-        query: { title },
-      },
-      `/movies/${id}`
-    );
+    router.push(`/movies/${title}/${id}`);
   };
   return (
     <div className="container">

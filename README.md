@@ -226,8 +226,7 @@ pages 디렉토리에서 `index`라는 이름으로 컴포넌트를 생성하면
 해당 페이지에서 `useRouter`훅을 이용하여 router를 출력했을때</br>
 query안에서 설정한 변수명으로 path를 확인할 수 있다.</br>
 ex) [id]로 설정한 경우 query: {id: '1'}</br>
-`[...id].tsx`처럼 `...`을 대괄호 안에 넣은 형식으로 만들면</br>
-모든 경로를 포착하는 동적 라우팅을 설정할 수 있다.(catch-all-URL)</br>
+
 </br>
 `Link` 컴포넌트말고 `router.push`를 사용해서도 페이지를 이동시킬 수 있다. </br>
 `Link`는 사용자가 반드시 클릭을 해야지 페이지가 이동되지만</br>
@@ -265,3 +264,34 @@ const onClick = (id: number) => {
 주의할 점은 이는 저 router를 통해서 해당 url에 접속했을 때 적용이 가능하며</br>
 해당 url을 직접 브라우저에 입력하여 접속했을 때는 query가 전달되지 않기 때문에</br>
 적용할 수 없다는 것이다.</br>
+
+## Catch All
+
+`[...params].tsx`처럼 `...`을 대괄호 안에 넣은 형식으로 만들면</br>
+모든 경로를 포착하는 동적 라우팅을 설정할 수 있다.</br>
+이 때 `router.query`를 조회해보면</br>
+query: {params: ['movieTitle', 'movieId']}와 같이 배열형태로 값이 주어지는 것을 볼 수 있다.</br>
+이를 이용해서 `[...params].tsx` 페이지에서 params 변수를 추출할 수 있다.</br>
+
+```js
+type T_movieDetailParams = [string, string] | [];
+
+export default function MovieDetail(){
+  const [title, id] = (router.query.params || []) as T_movieDetailParams;
+  ...
+}
+```
+
+`useRouter`는 client에서 실행되는 hook이므로 js가 다운로드되어 실행되기 전에는</br>
+router.query가 정의되지 않아 오류가 발생한다.(서버에서 router.query는 배열조차 아닌 상태)</br>
+이를 방지하기위해서 위의 예제와 같이 `router.query.params || []`로 빈배열을 할당하여</br>
+오류를 방지할 수 있다.</br>
+이렇게 작성한 경우는 client side rendering만 진행한 경우로써</br>
+페이지의 소스를 열어봤을 때 html에 데이터가 들어가야 하는 div에 빈 div만 보이는 것을 확인할 수 있다.</br>
+
+server side rendering을 위한 함수인 `getServerSideProps`의 매개변수로는 `context`가 주어진다.</br>
+이 context를 console에 log해보면 브라우저의 개발자 도구가 아니라</br>
+개발환경 서버를 실행한 터미널에서 log를 확인할 수 있다.</br>
+`context`는 params, req, res, query 등의 페이지/네트워크 정보를 포함하는 객체이다.</br>
+이 `context`를 활용하여 렌더링한 페이지 소스를 확인해보면 html에 해당 정보가 포함되어있다.
+따라서 이러한 pre-rendering을 통해 SEO를 최적화할 수 있다.
