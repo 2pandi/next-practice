@@ -1,4 +1,5 @@
 import Seo from "@/components/Seo";
+import { useRouter } from "next/router";
 
 interface I_Movie {
   adult: boolean;
@@ -18,11 +19,25 @@ interface I_Movie {
 }
 
 export default function Home({ results }: { results: I_Movie[] }) {
+  const router = useRouter();
+  const onClick = (id: number, title: string) => {
+    router.push(
+      {
+        pathname: `/movies/${id}`,
+        query: { title },
+      },
+      `/movies/${id}`
+    );
+  };
   return (
     <div className="container">
       <Seo title="Home" />
       {results.map((movie: I_Movie) => (
-        <div className="movie" key={movie.id}>
+        <div
+          onClick={() => onClick(movie.id, movie.original_title)}
+          className="movie"
+          key={movie.id}
+        >
           <img
             src={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`}
             alt={movie.title}

@@ -3,5 +3,9 @@ import { useRouter } from "next/router";
 export default function MovieId() {
   const router = useRouter();
   console.log(router);
-  return "movie id";
+  return (
+    <div>
+      <h4>{router.query.title || "Loading..."}</h4>
+    </div>
+  );
 }

@@ -227,4 +227,41 @@ pages 디렉토리에서 `index`라는 이름으로 컴포넌트를 생성하면
 query안에서 설정한 변수명으로 path를 확인할 수 있다.</br>
 ex) [id]로 설정한 경우 query: {id: '1'}</br>
 `[...id].tsx`처럼 `...`을 대괄호 안에 넣은 형식으로 만들면</br>
-모든 경로를 포착하는 동적 라우팅을 설정할 수 있다.</br>
+모든 경로를 포착하는 동적 라우팅을 설정할 수 있다.(catch-all-URL)</br>
+</br>
+`Link` 컴포넌트말고 `router.push`를 사용해서도 페이지를 이동시킬 수 있다. </br>
+`Link`는 사용자가 반드시 클릭을 해야지 페이지가 이동되지만</br>
+`router.push`는 코드만으로도 사용자의 상호작용을 기다리지 않고 페이지 이동이 가능하다.</br>
+또한 아래와 같이 작성하면 url 마스킹도 적용할 수 있다.(이 기능은 Link로도 가능)</br>
+
+```js
+const onClick = (id: number) => {
+  router.push(
+    {
+      pathname: `/movies/${id}`,
+      query: {
+        title: "potato",
+      },
+    },
+    `/movies/${id}`
+  );
+};
+
+<Link href={{
+  pathname: `/movies/${id}`,
+  query: {
+  title: "potato",
+  }}
+  as={`/movies/${id}`}
+  }>
+
+```
+
+두번째 파라미터 값은 `as`로 전달되는 것인데 마스킹될 주소를 적어주면 된다.</br>
+이렇게 하면 페이지 간에 쿼리로 데이터를 전달하지만 사용자에게는 노출시키지 않을 수 있다.</br>
+페이지로 전달된 데이터는 `router`를 통해 확인할 수 있다.</br>
+위의 경우 `query: {title: 'potato', id: {해당아이디}}`로 나타난다.</br>
+</br>
+주의할 점은 이는 저 router를 통해서 해당 url에 접속했을 때 적용이 가능하며</br>
+해당 url을 직접 브라우저에 입력하여 접속했을 때는 query가 전달되지 않기 때문에</br>
+적용할 수 없다는 것이다.</br>
