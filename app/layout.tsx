@@ -1,5 +1,5 @@
 import Link from "next/link";
-import "./globals.scss";
+import "styles/globals.scss";
 
 export const metadata = {
   title: "Apple Fresh",
