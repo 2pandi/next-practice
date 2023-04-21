@@ -1,22 +1,27 @@
 // "use client"; // -> 이 파일안에 있는 모든 컴포넌트가 client component가 됨.
 
 export default function Cart() {
+  const 장바구니 = ["tomatoes", "pasta"];
+
   return (
     <div>
       <h4 className="title">Cart</h4>
-      <div className="cart-item">
-        <p>상품명</p>
-        <p>$40</p>
-        <p>1개</p>
-      </div>
-      <div className="cart-item">
-        <p>상품명</p>
-        <p>$40</p>
-        <p>1개</p>
-      </div>
+      {장바구니.map((item) => (
+        <CartItem item={item} key={item} />
+      ))}
     </div>
   );
 }
+
+const CartItem = (props: { item: string }) => {
+  return (
+    <div className="cart-item">
+      <p>{props.item}</p>
+      <p>$40</p>
+      <p>1개</p>
+    </div>
+  );
+};
 
 /** server / client component
  * next.js의 컴포넌트는 server compenent와 client component로 나뉘는데
