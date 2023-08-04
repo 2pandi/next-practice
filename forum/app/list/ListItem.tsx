@@ -5,10 +5,17 @@ import { ObjectId } from "mongodb";
 import Link from "next/link";
 
 export default function ListItem({ result }: { result: I_postListItem[] }) {
-  const deleteClickHandler = (id: ObjectId) => {
-    fetch(`/api/list/${id}`, {
-      method: "DELETE",
-    });
+  const deleteClickHandler = async (id: ObjectId) => {
+    try {
+      const result = await fetch(`/api/list/${id}`, {
+        method: "DELETE",
+      });
+
+      // fetch 에러 발생시 바로 catch 되지 않고 throw 해줘야 함
+      if (!result.ok) throw new Error(result.statusText);
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   return (
