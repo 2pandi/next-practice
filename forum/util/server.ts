@@ -14,8 +14,8 @@ export const response405 = (
   ...allowedMethod: string[]
 ) => {
   res
-    .status(405)
     .setHeader("Allow", allowedMethod.join(", "))
+    .status(405)
     .json({ message: ERROR_MESSAGE.METHOD_NOT_ALLOWED });
 };
 
