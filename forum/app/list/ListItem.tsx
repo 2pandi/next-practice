@@ -3,16 +3,21 @@
 import { I_postListItem } from "@/components/interface";
 import { ObjectId } from "mongodb";
 import Link from "next/link";
+import { MouseEvent } from "react";
 
 export default function ListItem({ result }: { result: I_postListItem[] }) {
-  const deleteClickHandler = async (id: ObjectId) => {
+  const deleteClickHandler = async (id: ObjectId, ev: MouseEvent) => {
     try {
       const result = await fetch(`/api/list/${id}`, {
         method: "DELETE",
       });
-
       // fetch 에러 발생시 바로 catch 되지 않고 throw 해줘야 함
       if (!result.ok) throw new Error(result.statusText);
+      const { parentElement } = ev.target as HTMLElement;
+      parentElement!.style.opacity = "0";
+      setTimeout(() => {
+        parentElement!.style.display = "none";
+      }, 1000);
     } catch (e) {
       console.log(e);
     }
@@ -26,7 +31,7 @@ export default function ListItem({ result }: { result: I_postListItem[] }) {
             <h4>{e.title}</h4>
           </Link>
           <Link href={`/edit/${e._id}`}>✏️</Link>
-          <div onClick={() => deleteClickHandler(e._id)}>🗑️</div>
+          <div onClick={(ev) => deleteClickHandler(e._id, ev)}>🗑️</div>
           {/* <DetailLink postId={e._id.toString()} /> */}
           <p>{"1월 1일"}</p>
         </div>
