@@ -8,4 +8,5 @@ export const ERROR_MESSAGE = {
   METHOD_NOT_ALLOWED: "Message Not Allowed",
   BAD_REQUEST: "Bad Request",
   INTERNAL_SERVER_ERROR: "Internal Server Error",
+  UNAUTHORIZED_ACCESS: "Unauthorized Access",
 } as const;

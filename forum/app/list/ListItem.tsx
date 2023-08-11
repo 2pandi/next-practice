@@ -19,7 +19,7 @@ export default function ListItem({ result }: { result: I_postListItem[] }) {
         parentElement!.style.display = "none";
       }, 1000);
     } catch (e) {
-      console.log(e);
+      alert(e);
     }
   };
 
