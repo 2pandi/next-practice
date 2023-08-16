@@ -26,58 +26,47 @@ export { connectDB };
  * (프로덕션 환경에서는 중복으로 실행될 일이 없음.)
  */
 
-export const getDB = async (DBName: string) => {
-  return (await connectDB).db(DBName);
-};
+export const getDB = async (DBName: string) => (await connectDB).db(DBName);
 
-export const getCollection = async (DBName: string, collectionName: string) => {
-  return (await getDB(DBName)).collection(collectionName);
-};
+export const getCollection = async (DBName: string, collectionName: string) =>
+  (await getDB(DBName)).collection(collectionName);
 
 export const getDBResultToArray = async (
   DBName: string,
   collectionName: string
-) => {
-  return (await getCollection(DBName, collectionName)).find().toArray();
-};
+) => (await getCollection(DBName, collectionName)).find().toArray();
 
 export const findOneDocument = async (
   DBName: string,
   collectionName: string,
   query: any,
   options?: FindOptions
-) => {
-  return (await getCollection(DBName, collectionName)).findOne(query, options);
-};
+) => (await getCollection(DBName, collectionName)).findOne(query, options);
 
 export const insertOneDocument = async (
   DBName: string,
   collectionName: string,
   doc: any
-) => {
-  await (await getCollection(DBName, collectionName)).insertOne(doc);
-};
+) => await (await getCollection(DBName, collectionName)).insertOne(doc);
 
 export const updateOneDocument = async (
   DBName: string,
   collectionName: string,
   id: string,
   doc: any
-) => {
-  return (await getCollection(DBName, collectionName)).updateOne(
+) =>
+  (await getCollection(DBName, collectionName)).updateOne(
     // 수정할 게시물 정보
     { _id: new ObjectId(id) },
     // 수정할 내용
     { $set: { ...doc } }
   );
-};
 
 export const deleteOneDocument = async (
   DBName: string,
   collectionName: string,
   id: string
-) => {
-  return (await getCollection(DBName, collectionName)).deleteOne({
+) =>
+  (await getCollection(DBName, collectionName)).deleteOne({
     _id: new ObjectId(id),
   });
-};
