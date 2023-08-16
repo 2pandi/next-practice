@@ -10,6 +10,7 @@ import { isObjectWithEmptyString } from "@/components/util/validate";
 import { NextApiRequest, NextApiResponse } from "next";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../auth/[...nextauth]";
+import Session from "@/components/class/Session";
 
 export default async function handler(
   req: NextApiRequest,
@@ -25,12 +26,15 @@ export default async function handler(
       if (isObjectWithEmptyString(postData)) return response400(res);
 
       const session = await getServerSession(req, res, authOptions);
+      // const session = new Session(req, res, authOptions); // class 이용
 
       // 로그인 세션 정보가 없는 경우
       if (!session || !session.user) return response401(res);
+      // if (!(await session.getUser())) return response401(res); // class 이용
 
-      postData.author = session.user.email;
-
+      // const user = await session.getUser(); // class 이용
+      const user = session.user;
+      postData.author = user?.email;
       await (await getDB(DB.APPLE_FORUM.NAME))
         .collection(DB.APPLE_FORUM.POST)
         .insertOne(postData);
