@@ -20,7 +20,7 @@ export default async function handler(
 
   switch (req.method) {
     case "POST":
-      const postData = req.body;
+      const postData = JSON.parse(req.body);
 
       // 글 내용이 없는 경우
       if (isObjectWithEmptyString(postData)) return response400(res);
@@ -29,7 +29,8 @@ export default async function handler(
       // const session = new Session(req, res, authOptions); // class 이용
 
       // 로그인 세션 정보가 없는 경우
-      if (!session || !session.user) return response401(res);
+      if (!session || !session.user || !session.user.email)
+        return response401(res);
       // if (!(await session.getUser())) return response401(res); // class 이용
 
       // const user = await session.getUser(); // class 이용
